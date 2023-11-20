@@ -1,6 +1,12 @@
 Asp-net Core MVC test project
 
-#### Multi Arch
+#### Multi Arch Image
+```bash
+docker build -t emgi2/guran_2_2023:latest-amd64 .
+docker build -t emgi2/guran_2_2023:latest-arm64 .
+docker push emgi2/guran_2_2023:latest-amd64
+docker push emgi2/guran_2_2023:latest-arm64
+```
 Windows CMD
 ```bash
 docker manifest create emgi2/guran_2_2023:latest ^
