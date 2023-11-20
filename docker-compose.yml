@@ -19,7 +19,6 @@ services:
 
   web:
     image: emgi2/guran_2_2023
-    build: WD3
     container_name: wd3_web
     user: root
     ports:
