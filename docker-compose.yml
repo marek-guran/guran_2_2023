@@ -1,0 +1,54 @@
+version: '3.7'
+
+services:
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    user: root
+    container_name: wd3_db
+    ports:
+      - 1433:1433
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: wd3!password
+    networks:
+      - wd3_net
+    volumes:
+      - db_data:/var/opt/mssql/data
+    restart: unless-stopped
+
+  web:
+    image: emgi2/guran_2_2023
+    build: WD3
+    container_name: wd3_web
+    user: root
+    ports:
+      - 7777:8080
+    command: >
+      /bin/bash -c "
+        mkdir -p /app/wwwroot/uploads &&
+        chmod -R 777 /app/wwwroot/uploads &&
+        dotnet guran_2_2023.dll
+      "
+    volumes:
+      - uploads:/app/wwwroot/uploads
+    environment:
+      DBServer: db
+      DBPort: 1433
+      DBUser: SA
+      DBPassword: wd3!password
+      Database: wd3
+      ASPNETCORE_ENVIRONMENT: Development
+    depends_on:
+      - db
+    networks:
+      - wd3_net
+    restart: unless-stopped
+
+volumes:
+  db_data:
+  uploads:
+
+networks:
+  wd3_net:
+    name: wd3_net
